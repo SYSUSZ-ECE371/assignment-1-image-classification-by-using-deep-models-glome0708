@@ -1,0 +1,522 @@
+2025/05/14 01:52:03 - mmengine - INFO - 
+------------------------------------------------------------
+System environment:
+    sys.platform: win32
+    Python: 3.8.20 (default, Oct  3 2024, 15:19:54) [MSC v.1929 64 bit (AMD64)]
+    CUDA available: True
+    MUSA available: False
+    numpy_random_seed: 638377634
+    GPU 0: NVIDIA GeForce RTX 3050 Ti Laptop GPU
+    CUDA_HOME: C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.8
+    NVCC: Cuda compilation tools, release 12.8, V12.8.93
+    MSVC: 用于 x64 的 Microsoft (R) C/C++ 优化编译器 19.29.30157 版
+    GCC: n/a
+    PyTorch: 1.10.1
+    PyTorch compiling details: PyTorch built with:
+  - C++ Version: 199711
+  - MSVC 192829337
+  - Intel(R) Math Kernel Library Version 2020.0.2 Product Build 20200624 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v2.2.3 (Git Hash 7336ca9f055cf1bfa13efb658fe15dc9b41f0740)
+  - OpenMP 2019
+  - LAPACK is enabled (usually provided by MKL)
+  - CPU capability usage: AVX2
+  - CUDA Runtime 11.3
+  - NVCC architecture flags: -gencode;arch=compute_37,code=sm_37;-gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_61,code=sm_61;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75;-gencode;arch=compute_80,code=sm_80;-gencode;arch=compute_86,code=sm_86;-gencode;arch=compute_37,code=compute_37
+  - CuDNN 8.2
+  - Magma 2.5.4
+  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, CUDA_VERSION=11.3, CUDNN_VERSION=8.2.0, CXX_COMPILER=C:/cb/pytorch_1000000000000/work/tmp_bin/sccache-cl.exe, CXX_FLAGS=/DWIN32 /D_WINDOWS /GR /EHsc /w /bigobj -DUSE_PTHREADPOOL -openmp:experimental -IC:/cb/pytorch_1000000000000/work/mkl/include -DNDEBUG -DUSE_KINETO -DLIBKINETO_NOCUPTI -DUSE_FBGEMM -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE -DEDGE_PROFILER_USE_KINETO, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, TORCH_VERSION=1.10.1, USE_CUDA=ON, USE_CUDNN=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=OFF, USE_NNPACK=OFF, USE_OPENMP=ON, 
+
+    TorchVision: 0.11.2
+    OpenCV: 4.11.0
+    MMEngine: 0.10.7
+
+Runtime environment:
+    cudnn_benchmark: False
+    mp_cfg: {'mp_start_method': 'fork', 'opencv_num_threads': 0}
+    dist_cfg: {'backend': 'nccl'}
+    seed: 638377634
+    deterministic: False
+    Distributed launcher: none
+    Distributed training: False
+    GPU number: 1
+------------------------------------------------------------
+
+2025/05/14 01:52:04 - mmengine - INFO - Config:
+auto_scale_lr = dict(base_batch_size=256)
+classes_file = 'EX1/imagenet_format/classes.txt'
+data_preprocessor = dict(
+    mean=[
+        123.675,
+        116.28,
+        103.53,
+    ],
+    num_classes=1000,
+    std=[
+        58.395,
+        57.12,
+        57.375,
+    ],
+    to_rgb=True)
+data_root = 'EX1/imagenet_format'
+dataset_type = 'ImageNet'
+default_hooks = dict(
+    checkpoint=dict(_scope_='mmcls', interval=1, type='CheckpointHook'),
+    logger=dict(_scope_='mmcls', interval=100, type='LoggerHook'),
+    param_scheduler=dict(_scope_='mmcls', type='ParamSchedulerHook'),
+    sampler_seed=dict(_scope_='mmcls', type='DistSamplerSeedHook'),
+    timer=dict(_scope_='mmcls', type='IterTimerHook'),
+    visualization=dict(
+        _scope_='mmcls', enable=False, type='VisualizationHook'))
+default_scope = 'mmcls'
+env_cfg = dict(
+    cudnn_benchmark=False,
+    dist_cfg=dict(backend='nccl'),
+    mp_cfg=dict(mp_start_method='fork', opencv_num_threads=0))
+launcher = 'none'
+load_from = 'EX1/checkpoints/resnet18_8xb32_in1k_20210831-fbbb1da6.pth'
+log_level = 'INFO'
+model = dict(
+    _scope_='mmcls',
+    backbone=dict(
+        depth=18,
+        num_stages=4,
+        out_indices=(3, ),
+        style='pytorch',
+        type='ResNet'),
+    head=dict(
+        in_channels=512,
+        loss=dict(loss_weight=1.0, type='CrossEntropyLoss'),
+        num_classes=5,
+        topk=(
+            1,
+            5,
+        ),
+        type='LinearClsHead'),
+    neck=dict(type='GlobalAveragePooling'),
+    type='ImageClassifier')
+optim_wrapper = dict(
+    optimizer=dict(
+        _scope_='mmcls',
+        lr=0.01,
+        momentum=0.9,
+        type='SGD',
+        weight_decay=0.0001))
+param_scheduler = dict(
+    _scope_='mmcls',
+    by_epoch=True,
+    gamma=0.1,
+    milestones=[
+        30,
+        60,
+        90,
+    ],
+    type='MultiStepLR')
+randomness = dict(deterministic=False, seed=None)
+resume = False
+test_cfg = dict()
+test_dataloader = dict(
+    batch_size=32,
+    collate_fn=dict(type='default_collate'),
+    dataset=dict(
+        _scope_='mmcls',
+        ann_file='meta/val.txt',
+        data_prefix='val',
+        data_root='data/imagenet',
+        pipeline=[
+            dict(type='LoadImageFromFile'),
+            dict(edge='short', scale=256, type='ResizeEdge'),
+            dict(crop_size=224, type='CenterCrop'),
+            dict(type='PackClsInputs'),
+        ],
+        type='ImageNet'),
+    num_workers=5,
+    persistent_workers=True,
+    pin_memory=True,
+    sampler=dict(_scope_='mmcls', shuffle=False, type='DefaultSampler'))
+test_evaluator = dict(
+    _scope_='mmcls', topk=(
+        1,
+        5,
+    ), type='Accuracy')
+test_pipeline = [
+    dict(_scope_='mmcls', type='LoadImageFromFile'),
+    dict(_scope_='mmcls', edge='short', scale=256, type='ResizeEdge'),
+    dict(_scope_='mmcls', crop_size=224, type='CenterCrop'),
+    dict(_scope_='mmcls', type='PackClsInputs'),
+]
+train_cfg = dict(by_epoch=True, max_epochs=10, val_interval=1)
+train_dataloader = dict(
+    batch_size=32,
+    collate_fn=dict(type='default_collate'),
+    dataset=dict(
+        _scope_='mmcls',
+        ann_file='train.txt',
+        classes='EX1/imagenet_format/classes.txt',
+        data_prefix='train',
+        data_root='EX1/imagenet_format',
+        pipeline=[
+            dict(type='LoadImageFromFile'),
+            dict(scale=224, type='RandomResizedCrop'),
+            dict(direction='horizontal', prob=0.5, type='RandomFlip'),
+            dict(type='PackClsInputs'),
+        ],
+        type='ImageNet'),
+    num_workers=5,
+    persistent_workers=True,
+    pin_memory=True,
+    sampler=dict(_scope_='mmcls', shuffle=True, type='DefaultSampler'))
+train_pipeline = [
+    dict(_scope_='mmcls', type='LoadImageFromFile'),
+    dict(_scope_='mmcls', scale=224, type='RandomResizedCrop'),
+    dict(_scope_='mmcls', direction='horizontal', prob=0.5, type='RandomFlip'),
+    dict(_scope_='mmcls', type='PackClsInputs'),
+]
+val_cfg = dict()
+val_dataloader = dict(
+    batch_size=32,
+    collate_fn=dict(type='default_collate'),
+    dataset=dict(
+        _scope_='mmcls',
+        ann_file='val.txt',
+        classes='EX1/imagenet_format/classes.txt',
+        data_prefix='val',
+        data_root='EX1/imagenet_format',
+        pipeline=[
+            dict(type='LoadImageFromFile'),
+            dict(edge='short', scale=256, type='ResizeEdge'),
+            dict(crop_size=224, type='CenterCrop'),
+            dict(type='PackClsInputs'),
+        ],
+        type='ImageNet'),
+    num_workers=5,
+    persistent_workers=True,
+    pin_memory=True,
+    sampler=dict(_scope_='mmcls', shuffle=False, type='DefaultSampler'))
+val_evaluator = dict(_scope_='mmcls', topk=(1, ), type='Accuracy')
+vis_backends = [
+    dict(_scope_='mmcls', type='LocalVisBackend'),
+]
+visualizer = dict(
+    _scope_='mmcls',
+    type='ClsVisualizer',
+    vis_backends=[
+        dict(type='LocalVisBackend'),
+    ])
+work_dir = 'EX1/work_dir'
+
+2025/05/14 01:52:06 - mmengine - INFO - Distributed training is not used, all SyncBatchNorm (SyncBN) layers in the model will be automatically reverted to BatchNormXd layers if they are used.
+2025/05/14 01:52:06 - mmengine - INFO - Hooks will be executed in the following order:
+before_run:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+before_train:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+before_train_epoch:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(NORMAL      ) DistSamplerSeedHook                
+ -------------------- 
+before_train_iter:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+after_train_iter:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(BELOW_NORMAL) LoggerHook                         
+(LOW         ) ParamSchedulerHook                 
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+after_train_epoch:
+(NORMAL      ) IterTimerHook                      
+(LOW         ) ParamSchedulerHook                 
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+before_val:
+(VERY_HIGH   ) RuntimeInfoHook                    
+ -------------------- 
+before_val_epoch:
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+before_val_iter:
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+after_val_iter:
+(NORMAL      ) IterTimerHook                      
+(NORMAL      ) VisualizationHook                  
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+after_val_epoch:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(BELOW_NORMAL) LoggerHook                         
+(LOW         ) ParamSchedulerHook                 
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+after_val:
+(VERY_HIGH   ) RuntimeInfoHook                    
+ -------------------- 
+after_train:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+before_test:
+(VERY_HIGH   ) RuntimeInfoHook                    
+ -------------------- 
+before_test_epoch:
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+before_test_iter:
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+after_test_iter:
+(NORMAL      ) IterTimerHook                      
+(NORMAL      ) VisualizationHook                  
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+after_test_epoch:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+after_test:
+(VERY_HIGH   ) RuntimeInfoHook                    
+ -------------------- 
+after_run:
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+Name of parameter - Initialization information
+
+backbone.conv1.weight - torch.Size([64, 3, 7, 7]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.bn1.weight - torch.Size([64]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.bn1.bias - torch.Size([64]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer1.0.conv1.weight - torch.Size([64, 64, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer1.0.bn1.weight - torch.Size([64]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer1.0.bn1.bias - torch.Size([64]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer1.0.conv2.weight - torch.Size([64, 64, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer1.0.bn2.weight - torch.Size([64]): 
+Initialized by user-defined `init_weights` in ResNet  
+
+backbone.layer1.0.bn2.bias - torch.Size([64]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer1.1.conv1.weight - torch.Size([64, 64, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer1.1.bn1.weight - torch.Size([64]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer1.1.bn1.bias - torch.Size([64]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer1.1.conv2.weight - torch.Size([64, 64, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer1.1.bn2.weight - torch.Size([64]): 
+Initialized by user-defined `init_weights` in ResNet  
+
+backbone.layer1.1.bn2.bias - torch.Size([64]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer2.0.conv1.weight - torch.Size([128, 64, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer2.0.bn1.weight - torch.Size([128]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer2.0.bn1.bias - torch.Size([128]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer2.0.conv2.weight - torch.Size([128, 128, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer2.0.bn2.weight - torch.Size([128]): 
+Initialized by user-defined `init_weights` in ResNet  
+
+backbone.layer2.0.bn2.bias - torch.Size([128]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer2.0.downsample.0.weight - torch.Size([128, 64, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer2.0.downsample.1.weight - torch.Size([128]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer2.0.downsample.1.bias - torch.Size([128]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer2.1.conv1.weight - torch.Size([128, 128, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer2.1.bn1.weight - torch.Size([128]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer2.1.bn1.bias - torch.Size([128]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer2.1.conv2.weight - torch.Size([128, 128, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer2.1.bn2.weight - torch.Size([128]): 
+Initialized by user-defined `init_weights` in ResNet  
+
+backbone.layer2.1.bn2.bias - torch.Size([128]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer3.0.conv1.weight - torch.Size([256, 128, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer3.0.bn1.weight - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer3.0.bn1.bias - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer3.0.conv2.weight - torch.Size([256, 256, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer3.0.bn2.weight - torch.Size([256]): 
+Initialized by user-defined `init_weights` in ResNet  
+
+backbone.layer3.0.bn2.bias - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer3.0.downsample.0.weight - torch.Size([256, 128, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer3.0.downsample.1.weight - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer3.0.downsample.1.bias - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer3.1.conv1.weight - torch.Size([256, 256, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer3.1.bn1.weight - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer3.1.bn1.bias - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer3.1.conv2.weight - torch.Size([256, 256, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer3.1.bn2.weight - torch.Size([256]): 
+Initialized by user-defined `init_weights` in ResNet  
+
+backbone.layer3.1.bn2.bias - torch.Size([256]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer4.0.conv1.weight - torch.Size([512, 256, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer4.0.bn1.weight - torch.Size([512]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer4.0.bn1.bias - torch.Size([512]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer4.0.conv2.weight - torch.Size([512, 512, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer4.0.bn2.weight - torch.Size([512]): 
+Initialized by user-defined `init_weights` in ResNet  
+
+backbone.layer4.0.bn2.bias - torch.Size([512]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer4.0.downsample.0.weight - torch.Size([512, 256, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer4.0.downsample.1.weight - torch.Size([512]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer4.0.downsample.1.bias - torch.Size([512]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer4.1.conv1.weight - torch.Size([512, 512, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer4.1.bn1.weight - torch.Size([512]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer4.1.bn1.bias - torch.Size([512]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+backbone.layer4.1.conv2.weight - torch.Size([512, 512, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer4.1.bn2.weight - torch.Size([512]): 
+Initialized by user-defined `init_weights` in ResNet  
+
+backbone.layer4.1.bn2.bias - torch.Size([512]): 
+The value is the same before and after calling `init_weights` of ImageClassifier  
+
+head.fc.weight - torch.Size([5, 512]): 
+NormalInit: mean=0, std=0.01, bias=0 
+
+head.fc.bias - torch.Size([5]): 
+NormalInit: mean=0, std=0.01, bias=0 
+2025/05/14 01:52:09 - mmengine - INFO - Load checkpoint from EX1/checkpoints/resnet18_8xb32_in1k_20210831-fbbb1da6.pth
+2025/05/14 01:52:09 - mmengine - WARNING - "FileClient" will be deprecated in future. Please use io functions in https://mmengine.readthedocs.io/en/latest/api/fileio.html#file-io
+2025/05/14 01:52:09 - mmengine - WARNING - "HardDiskBackend" is the alias of "LocalBackend" and the former will be deprecated in future.
+2025/05/14 01:52:09 - mmengine - INFO - Checkpoints will be saved to C:\Users\aa\assign\EX1\work_dir.
+2025/05/14 01:52:51 - mmengine - INFO - Exp name: flower_resnet18_finetune_20250514_015156
+2025/05/14 01:52:51 - mmengine - INFO - Epoch(train)  [1][72/72]  lr: 1.0000e-02  eta: 0:06:13  time: 0.1022  data_time: 0.0003  memory: 876  loss: 0.8720
+2025/05/14 01:52:51 - mmengine - INFO - Saving checkpoint at 1 epochs
+2025/05/14 01:53:21 - mmengine - INFO - Epoch(val) [1][18/18]    accuracy/top1: 79.8951  data_time: 1.6014  time: 1.6523
+2025/05/14 01:53:29 - mmengine - INFO - Exp name: flower_resnet18_finetune_20250514_015156
+2025/05/14 01:53:29 - mmengine - INFO - Epoch(train)  [2][72/72]  lr: 1.0000e-02  eta: 0:03:17  time: 0.1020  data_time: 0.0005  memory: 876  loss: 0.8029
+2025/05/14 01:53:29 - mmengine - INFO - Saving checkpoint at 2 epochs
+2025/05/14 01:53:31 - mmengine - INFO - Epoch(val) [2][18/18]    accuracy/top1: 85.8392  data_time: 0.0054  time: 0.0410
+2025/05/14 01:53:38 - mmengine - INFO - Exp name: flower_resnet18_finetune_20250514_015156
+2025/05/14 01:53:38 - mmengine - INFO - Epoch(train)  [3][72/72]  lr: 1.0000e-02  eta: 0:02:13  time: 0.1019  data_time: 0.0003  memory: 876  loss: 0.6828
+2025/05/14 01:53:38 - mmengine - INFO - Saving checkpoint at 3 epochs
+2025/05/14 01:53:40 - mmengine - INFO - Epoch(val) [3][18/18]    accuracy/top1: 88.2867  data_time: 0.0052  time: 0.0415
+2025/05/14 01:53:48 - mmengine - INFO - Exp name: flower_resnet18_finetune_20250514_015156
+2025/05/14 01:53:48 - mmengine - INFO - Epoch(train)  [4][72/72]  lr: 1.0000e-02  eta: 0:01:37  time: 0.1003  data_time: 0.0005  memory: 876  loss: 0.4062
+2025/05/14 01:53:48 - mmengine - INFO - Saving checkpoint at 4 epochs
+2025/05/14 01:53:49 - mmengine - INFO - Epoch(val) [4][18/18]    accuracy/top1: 89.3357  data_time: 0.0065  time: 0.0429
+2025/05/14 01:53:57 - mmengine - INFO - Exp name: flower_resnet18_finetune_20250514_015156
+2025/05/14 01:53:57 - mmengine - INFO - Epoch(train)  [5][72/72]  lr: 1.0000e-02  eta: 0:01:12  time: 0.1009  data_time: 0.0001  memory: 876  loss: 0.3582
+2025/05/14 01:53:57 - mmengine - INFO - Saving checkpoint at 5 epochs
+2025/05/14 01:53:59 - mmengine - INFO - Epoch(val) [5][18/18]    accuracy/top1: 90.5594  data_time: 0.0050  time: 0.0412
+2025/05/14 01:54:07 - mmengine - INFO - Exp name: flower_resnet18_finetune_20250514_015156
+2025/05/14 01:54:07 - mmengine - INFO - Epoch(train)  [6][72/72]  lr: 1.0000e-02  eta: 0:00:53  time: 0.1027  data_time: 0.0005  memory: 876  loss: 0.3751
+2025/05/14 01:54:07 - mmengine - INFO - Saving checkpoint at 6 epochs
+2025/05/14 01:54:08 - mmengine - INFO - Epoch(val) [6][18/18]    accuracy/top1: 93.0070  data_time: 0.0051  time: 0.0406
+2025/05/14 01:54:16 - mmengine - INFO - Exp name: flower_resnet18_finetune_20250514_015156
+2025/05/14 01:54:16 - mmengine - INFO - Epoch(train)  [7][72/72]  lr: 1.0000e-02  eta: 0:00:37  time: 0.1006  data_time: 0.0008  memory: 876  loss: 0.4128
+2025/05/14 01:54:16 - mmengine - INFO - Saving checkpoint at 7 epochs
+2025/05/14 01:54:17 - mmengine - INFO - Epoch(val) [7][18/18]    accuracy/top1: 90.3846  data_time: 0.0047  time: 0.0410
+2025/05/14 01:54:25 - mmengine - INFO - Exp name: flower_resnet18_finetune_20250514_015156
+2025/05/14 01:54:25 - mmengine - INFO - Epoch(train)  [8][72/72]  lr: 1.0000e-02  eta: 0:00:24  time: 0.1013  data_time: 0.0003  memory: 876  loss: 0.5337
+2025/05/14 01:54:25 - mmengine - INFO - Saving checkpoint at 8 epochs
+2025/05/14 01:54:27 - mmengine - INFO - Epoch(val) [8][18/18]    accuracy/top1: 90.9091  data_time: 0.0048  time: 0.0410
+2025/05/14 01:54:35 - mmengine - INFO - Exp name: flower_resnet18_finetune_20250514_015156
+2025/05/14 01:54:35 - mmengine - INFO - Epoch(train)  [9][72/72]  lr: 1.0000e-02  eta: 0:00:11  time: 0.1002  data_time: 0.0006  memory: 876  loss: 0.3770
+2025/05/14 01:54:35 - mmengine - INFO - Saving checkpoint at 9 epochs
+2025/05/14 01:54:36 - mmengine - INFO - Epoch(val) [9][18/18]    accuracy/top1: 85.8392  data_time: 0.0050  time: 0.0407
+2025/05/14 01:54:44 - mmengine - INFO - Exp name: flower_resnet18_finetune_20250514_015156
+2025/05/14 01:54:44 - mmengine - INFO - Epoch(train) [10][72/72]  lr: 1.0000e-02  eta: 0:00:00  time: 0.1006  data_time: 0.0005  memory: 876  loss: 0.4068
+2025/05/14 01:54:44 - mmengine - INFO - Saving checkpoint at 10 epochs
+2025/05/14 01:54:45 - mmengine - INFO - Epoch(val) [10][18/18]    accuracy/top1: 91.4336  data_time: 0.0045  time: 0.0412

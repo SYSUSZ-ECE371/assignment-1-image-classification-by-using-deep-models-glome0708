@@ -1,2 +1,25 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/VkJVVOAn)
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-2e0aaae1b6195c2367325f4f02e2d04e9abb55f0b24a779b69b11b9e10269abc.svg)](https://classroom.github.com/online_ide?assignment_repo_id=19518260&assignment_repo_type=AssignmentRepo)
+## 实验一
+
+- **数据划分脚本**  
+  `EX1/split_dataset.py`
+
+- **微调配置文件**  
+  `EX1/configs/my_config/flower_resnet18_finetune.py`
+
+- **预训练模型**  
+  `EX1/checkpoints/resnet18_8xb32_in1k_20210831-fbbb1da6.pth`
+
+- **训练输出目录**  
+  `EX1/work_dir/`
+
+- **运行命令**  
+  ```bash
+  python EX1/tools/train.py EX1/configs/my_custom/flower_resnet18_finetune.py
+
+## 实验二
+
+- **程序输出**  
+  `EX2/output.txt`
+
+- **最佳模型文件**  
+  `EX2/work_dir/best_model.pth`
